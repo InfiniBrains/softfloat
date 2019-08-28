@@ -1,0 +1,6 @@
+[submodule "pulp-sw"]
+	path = pulp-sw
+	url = https://iis-git.ee.ethz.ch/pulp-sw/softFloat.git
+[submodule "berkeley-sw"]
+	path = berkeley-sw
+	url = https://github.com/ucb-bar/berkeley-softfloat-3.git
