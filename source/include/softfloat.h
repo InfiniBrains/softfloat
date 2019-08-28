@@ -32,8 +32,16 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+----
+
+Extended for float8 by Stefan Mach, Integrated Systems Institute, ETH Zurich
+
 =============================================================================*/
 
+/* C++ */
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /*============================================================================
 | Note:  If SoftFloat is made available as a general library for programs to
@@ -74,7 +82,7 @@ enum {
     softfloat_round_min         = 2,
     softfloat_round_max         = 3,
     softfloat_round_near_maxMag = 4,
-    softfloat_round_odd         = 6
+    softfloat_round_odd         = 5
 };
 
 /*----------------------------------------------------------------------------
@@ -96,7 +104,9 @@ void softfloat_raiseFlags( uint_fast8_t );
 
 /*----------------------------------------------------------------------------
 | Integer-to-floating-point conversion routines.
+| -> added float8 support (smach)
 *----------------------------------------------------------------------------*/
+float8_t  ui32_to_f8 ( uint32_t );
 float16_t ui32_to_f16( uint32_t );
 float32_t ui32_to_f32( uint32_t );
 float64_t ui32_to_f64( uint32_t );
@@ -106,6 +116,7 @@ float128_t ui32_to_f128( uint32_t );
 #endif
 void ui32_to_extF80M( uint32_t, extFloat80_t * );
 void ui32_to_f128M( uint32_t, float128_t * );
+float8_t  ui64_to_f8 ( uint64_t );
 float16_t ui64_to_f16( uint64_t );
 float32_t ui64_to_f32( uint64_t );
 float64_t ui64_to_f64( uint64_t );
@@ -115,6 +126,7 @@ float128_t ui64_to_f128( uint64_t );
 #endif
 void ui64_to_extF80M( uint64_t, extFloat80_t * );
 void ui64_to_f128M( uint64_t, float128_t * );
+float8_t  i32_to_f8 ( int32_t );
 float16_t i32_to_f16( int32_t );
 float32_t i32_to_f32( int32_t );
 float64_t i32_to_f64( int32_t );
@@ -124,6 +136,7 @@ float128_t i32_to_f128( int32_t );
 #endif
 void i32_to_extF80M( int32_t, extFloat80_t * );
 void i32_to_f128M( int32_t, float128_t * );
+float8_t  i64_to_f8 ( int64_t );
 float16_t i64_to_f16( int64_t );
 float32_t i64_to_f32( int64_t );
 float64_t i64_to_f64( int64_t );
@@ -133,6 +146,42 @@ float128_t i64_to_f128( int64_t );
 #endif
 void i64_to_extF80M( int64_t, extFloat80_t * );
 void i64_to_f128M( int64_t, float128_t * );
+
+/*----------------------------------------------------------------------------
+| 8-bit (quarter-precision) floating-point operations for PULP. (smach)
+*----------------------------------------------------------------------------*/
+uint_fast32_t f8_to_ui32( float8_t, uint_fast8_t, bool );
+uint_fast64_t f8_to_ui64( float8_t, uint_fast8_t, bool );
+int_fast32_t f8_to_i32( float8_t, uint_fast8_t, bool );
+int_fast64_t f8_to_i64( float8_t, uint_fast8_t, bool );
+uint_fast32_t f8_to_ui32_r_minMag( float8_t, bool );
+uint_fast64_t f8_to_ui64_r_minMag( float8_t, bool );
+int_fast32_t f8_to_i32_r_minMag( float8_t, bool );
+int_fast64_t f8_to_i64_r_minMag( float8_t, bool );
+float16_t f8_to_f16( float8_t ); // NEWLY ADDED
+float32_t f8_to_f32( float8_t );
+float64_t f8_to_f64( float8_t );
+#ifdef SOFTFLOAT_FAST_INT64
+extFloat80_t f8_to_extF80( float8_t );
+float128_t f8_to_f128( float8_t );
+#endif
+void f8_to_extF80M( float8_t, extFloat80_t * );
+void f8_to_f128M( float8_t, float128_t * );
+float8_t f8_roundToInt( float8_t, uint_fast8_t, bool );
+float8_t f8_add( float8_t, float8_t );
+float8_t f8_sub( float8_t, float8_t );
+float8_t f8_mul( float8_t, float8_t );
+float8_t f8_mulAdd( float8_t, float8_t, float8_t );
+float8_t f8_div( float8_t, float8_t );
+float8_t f8_rem( float8_t, float8_t );
+float8_t f8_sqrt( float8_t );
+bool f8_eq( float8_t, float8_t );
+bool f8_le( float8_t, float8_t );
+bool f8_lt( float8_t, float8_t );
+bool f8_eq_signaling( float8_t, float8_t );
+bool f8_le_quiet( float8_t, float8_t );
+bool f8_lt_quiet( float8_t, float8_t );
+bool f8_isSignalingNaN( float8_t );
 
 /*----------------------------------------------------------------------------
 | 16-bit (half-precision) floating-point operations.
@@ -145,6 +194,7 @@ uint_fast32_t f16_to_ui32_r_minMag( float16_t, bool );
 uint_fast64_t f16_to_ui64_r_minMag( float16_t, bool );
 int_fast32_t f16_to_i32_r_minMag( float16_t, bool );
 int_fast64_t f16_to_i64_r_minMag( float16_t, bool );
+float8_t  f16_to_f8(  float16_t ); // NEWLY ADDED
 float32_t f16_to_f32( float16_t );
 float64_t f16_to_f64( float16_t );
 #ifdef SOFTFLOAT_FAST_INT64
@@ -180,6 +230,7 @@ uint_fast32_t f32_to_ui32_r_minMag( float32_t, bool );
 uint_fast64_t f32_to_ui64_r_minMag( float32_t, bool );
 int_fast32_t f32_to_i32_r_minMag( float32_t, bool );
 int_fast64_t f32_to_i64_r_minMag( float32_t, bool );
+float8_t  f32_to_f8(  float32_t ); // NEWLY ADDED
 float16_t f32_to_f16( float32_t );
 float64_t f32_to_f64( float32_t );
 #ifdef SOFTFLOAT_FAST_INT64
@@ -215,6 +266,7 @@ uint_fast32_t f64_to_ui32_r_minMag( float64_t, bool );
 uint_fast64_t f64_to_ui64_r_minMag( float64_t, bool );
 int_fast32_t f64_to_i32_r_minMag( float64_t, bool );
 int_fast64_t f64_to_i64_r_minMag( float64_t, bool );
+float8_t  f64_to_f8(  float64_t ); // NEWLY ADDED
 float16_t f64_to_f16( float64_t );
 float32_t f64_to_f32( float64_t );
 #ifdef SOFTFLOAT_FAST_INT64
@@ -257,6 +309,7 @@ uint_fast32_t extF80_to_ui32_r_minMag( extFloat80_t, bool );
 uint_fast64_t extF80_to_ui64_r_minMag( extFloat80_t, bool );
 int_fast32_t extF80_to_i32_r_minMag( extFloat80_t, bool );
 int_fast64_t extF80_to_i64_r_minMag( extFloat80_t, bool );
+float8_t  extF80_to_f8(  extFloat80_t ); // NEWLY ADDED
 float16_t extF80_to_f16( extFloat80_t );
 float32_t extF80_to_f32( extFloat80_t );
 float64_t extF80_to_f64( extFloat80_t );
@@ -284,6 +337,7 @@ uint_fast32_t extF80M_to_ui32_r_minMag( const extFloat80_t *, bool );
 uint_fast64_t extF80M_to_ui64_r_minMag( const extFloat80_t *, bool );
 int_fast32_t extF80M_to_i32_r_minMag( const extFloat80_t *, bool );
 int_fast64_t extF80M_to_i64_r_minMag( const extFloat80_t *, bool );
+float8_t  extF80M_to_f8(  const extFloat80_t * ); // NEWLY ADDED
 float16_t extF80M_to_f16( const extFloat80_t * );
 float32_t extF80M_to_f32( const extFloat80_t * );
 float64_t extF80M_to_f64( const extFloat80_t * );
@@ -317,6 +371,7 @@ uint_fast32_t f128_to_ui32_r_minMag( float128_t, bool );
 uint_fast64_t f128_to_ui64_r_minMag( float128_t, bool );
 int_fast32_t f128_to_i32_r_minMag( float128_t, bool );
 int_fast64_t f128_to_i64_r_minMag( float128_t, bool );
+float8_t  f128_to_f8(  float128_t ); // NEWLY ADDED
 float16_t f128_to_f16( float128_t );
 float32_t f128_to_f32( float128_t );
 float64_t f128_to_f64( float128_t );
@@ -345,6 +400,7 @@ uint_fast32_t f128M_to_ui32_r_minMag( const float128_t *, bool );
 uint_fast64_t f128M_to_ui64_r_minMag( const float128_t *, bool );
 int_fast32_t f128M_to_i32_r_minMag( const float128_t *, bool );
 int_fast64_t f128M_to_i64_r_minMag( const float128_t *, bool );
+float8_t  f128M_to_f8(  const float128_t * ); // NEWLY ADDED
 float16_t f128M_to_f16( const float128_t * );
 float32_t f128M_to_f32( const float128_t * );
 float64_t f128M_to_f64( const float128_t * );
@@ -370,3 +426,7 @@ bool f128M_isSignalingNaN( const float128_t * );
 
 #endif
 
+/* C++ */
+#ifdef __cplusplus
+}
+#endif

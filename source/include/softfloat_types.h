@@ -32,6 +32,10 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+----
+
+Extended for float8 by Stefan Mach, Integrated Systems Institute, ETH Zurich
+
 =============================================================================*/
 
 #ifndef softfloat_types_h
@@ -46,8 +50,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 | platform has "native" support for IEEE-Standard floating-point formats,
 | the types below may, if desired, be defined as aliases for the native types
 | (typically 'float' and 'double', and possibly 'long double').
+| -> Added 8-bit floating point type (smach)
 *----------------------------------------------------------------------------*/
-typedef struct { uint8_t v; } float8_t;
+typedef struct { uint8_t  v; } float8_t;	/* float8_t uses 5exp, 2mant bits*/
 typedef struct { uint16_t v; } float16_t;
 typedef struct { uint32_t v; } float32_t;
 typedef struct { uint64_t v; } float64_t;

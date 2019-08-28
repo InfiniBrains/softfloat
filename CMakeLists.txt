@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.13)
 
 project(softfloat)
 
+set (CMAKE_CXX_STANDARD 14)
+
 SET(SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source")
 SET(SPECIALIZE_TYPE 8086)
 SET(SOFTFLOAT_OPTS "-DSOFTFLOAT_ROUND_ODD -DINLINE_LEVEL=5 -DSOFTFLOAT_FAST_DIV32TO16 -DSOFTFLOAT_FAST_DIV64TO32")
@@ -9,6 +11,7 @@ SET(SOFTFLOAT_OPTS "-DSOFTFLOAT_ROUND_ODD -DINLINE_LEVEL=5 -DSOFTFLOAT_FAST_DIV3
 include_directories(softfloat PUBLIC
         "${SOURCE_DIR}/${SPECIALIZE_TYPE}"
         "${SOURCE_DIR}/include"
+        "${CMAKE_CURRENT_SOURCE_DIR}/build/Linux-386-GCC"
         )
 
 add_library(sw SHARED
@@ -311,3 +314,4 @@ ${SOURCE_DIR}/f128M_lt_quiet.c
 )
 
 add_executable(example "${CMAKE_CURRENT_SOURCE_DIR}/example/example.cpp")
+target_link_libraries(example PUBLIC sw)

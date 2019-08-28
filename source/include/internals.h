@@ -32,6 +32,10 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+----
+
+Extended for float8 by Stefan Mach, Integrated Systems Institute, ETH Zurich
+
 =============================================================================*/
 
 #ifndef internals_h
@@ -42,6 +46,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "primitives.h"
 #include "softfloat_types.h"
 
+union ui8_f8   { uint8_t ui;  float8_t  f; };
 union ui16_f16 { uint16_t ui; float16_t f; };
 union ui32_f32 { uint32_t ui; float32_t f; };
 union ui64_f64 { uint64_t ui; float64_t f; };
@@ -77,6 +82,28 @@ int_fast64_t
 #else
 int_fast64_t softfloat_roundMToI64( bool, uint32_t *, uint_fast8_t, bool );
 #endif
+
+/*----------------------------------------------------------------------------
+| Added float8 functions (smach)
+*----------------------------------------------------------------------------*/
+#define signF8UI( a ) ((bool) ((uint8_t) (a)>>7))
+#define expF8UI( a ) ((int_fast8_t) ((a)>>2) & 0x1F)
+#define fracF8UI( a ) ((a) & 0x03)
+#define packToF8UI( sign, exp, sig ) (((uint8_t) (sign)<<7) + ((uint8_t) (exp)<<2) + (sig))
+
+#define isNaNF8UI( a ) (((~(a) & 0x7C) == 0) && ((a) & 0x03))
+
+struct exp8_sig8 { int_fast8_t exp; uint_fast8_t sig; };
+struct exp8_sig8 softfloat_normSubnormalF8Sig( uint_fast8_t );
+
+float8_t softfloat_roundPackToF8( bool, int_fast8_t, uint_fast8_t );
+float8_t softfloat_normRoundPackToF8( bool, int_fast8_t, uint_fast8_t );
+
+float8_t softfloat_addMagsF8( uint_fast8_t, uint_fast8_t );
+float8_t softfloat_subMagsF8( uint_fast8_t, uint_fast8_t );
+float8_t
+ softfloat_mulAddF8(
+     uint_fast8_t, uint_fast8_t, uint_fast8_t, uint_fast8_t );
 
 /*----------------------------------------------------------------------------
 *----------------------------------------------------------------------------*/

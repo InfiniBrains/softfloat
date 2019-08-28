@@ -32,6 +32,10 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+----
+
+Extended for float8 by Stefan Mach, Integrated Systems Institute, ETH Zurich
+
 =============================================================================*/
 
 #ifndef primitives_h
@@ -160,6 +164,18 @@ uint_fast8_t softfloat_countLeadingZeros32( uint32_t a );
 uint_fast8_t softfloat_countLeadingZeros64( uint64_t a );
 #endif
 
+/*----------------------------------------------------------------------------
+| LUT for reciprocals of 8-bit float mantissae (2 bits). Returns a pure
+| unsigned fraction, having no integer bits and 8 fraction bits.
+*----------------------------------------------------------------------------*/
+extern const uint8_t softfloat_recip_F8[4];
+
+/*----------------------------------------------------------------------------
+| LUT for division of 8-bit float mantissae (2 bits). Returns resulting
+| mantissa with four rounding bits.
+*----------------------------------------------------------------------------*/
+extern const uint8_t softfloat_div_F8[16];
+
 extern const uint16_t softfloat_approxRecip_1k0s[16];
 extern const uint16_t softfloat_approxRecip_1k1s[16];
 
@@ -181,6 +197,12 @@ extern const uint16_t softfloat_approxRecip_1k1s[16];
 uint32_t softfloat_approxRecip32_1( uint32_t a );
 #endif
 #endif
+
+/*----------------------------------------------------------------------------
+| LUT for squaree root of 8-bit float mantissa (2 bits). Returns resulting
+| mantissa with four rounding bits.
+*----------------------------------------------------------------------------*/
+extern const uint8_t softfloat_sqrt_F8[16];
 
 extern const uint16_t softfloat_approxRecipSqrt_1k0s[16];
 extern const uint16_t softfloat_approxRecipSqrt_1k1s[16];
