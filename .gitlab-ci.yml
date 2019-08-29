@@ -1,0 +1,4 @@
+compile:
+  script:
+    - cmake -H. -Bbuild
+    - cmake --build build

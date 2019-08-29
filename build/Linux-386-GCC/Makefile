@@ -2,7 +2,7 @@
 #=============================================================================
 #
 # This Makefile is part of the SoftFloat IEEE Floating-Point Arithmetic
-# Package, Release 3e, by John R. Hauser.
+# Package, Release 3c, by John R. Hauser.
 #
 # Copyright 2011, 2012, 2013, 2014, 2015, 2016, 2017 The Regents of the
 # University of California.  All rights reserved.
@@ -32,6 +32,10 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 # THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
+# ----
+#
+# Extended for float8 by Stefan Mach, Integrated Systems Institute, ETH Zurich
+#
 #=============================================================================
 
 SOURCE_DIR ?= ../../source
@@ -39,19 +43,20 @@ SPECIALIZE_TYPE ?= 8086
 
 SOFTFLOAT_OPTS ?= \
   -DSOFTFLOAT_ROUND_ODD -DINLINE_LEVEL=5 -DSOFTFLOAT_FAST_DIV32TO16 \
-  -DSOFTFLOAT_FAST_DIV64TO32
+  -DSOFTFLOAT_FAST_DIV64TO32 -DSOFTFLOAT_FAST_DIV16TO8 -DFLEXFLOAT_ON_DOUBLE
 
 DELETE = rm -f
 C_INCLUDES = -I. -I$(SOURCE_DIR)/$(SPECIALIZE_TYPE) -I$(SOURCE_DIR)/include
 COMPILE_C = \
   gcc -c -Werror-implicit-function-declaration $(SOFTFLOAT_OPTS) \
     $(C_INCLUDES) -O2 -o $@
+COMPILE_CPP = \
+  g++ -c -Werror-implicit-function-declaration $(SOFTFLOAT_OPTS) \
+    $(C_INCLUDES) -std=c++11 -O2 -o $@
 MAKELIB = ar crs $@
 
 OBJ = .o
 LIB = .a
-
-OTHER_HEADERS =
 
 .PHONY: all
 all: softfloat$(LIB)
@@ -81,14 +86,20 @@ OBJS_PRIMITIVES = \
   s_subM$(OBJ) \
   s_mul64To128M$(OBJ) \
   s_mul128MTo256M$(OBJ) \
+  s_recip_8$(OBJ) \
   s_approxRecip_1Ks$(OBJ) \
   s_approxRecip32_1$(OBJ) \
+  s_div_8$(OBJ) \
+  s_sqrt_8$(OBJ) \
   s_approxRecipSqrt_1Ks$(OBJ) \
   s_approxRecipSqrt32_1$(OBJ) \
   s_remStepMBy32$(OBJ) \
 
 OBJS_SPECIALIZE = \
   softfloat_raiseFlags$(OBJ) \
+  s_f8UIToCommonNaN$(OBJ) \
+  s_commonNaNToF8UI$(OBJ) \
+  s_propagateNaNF8UI$(OBJ) \
   s_f16UIToCommonNaN$(OBJ) \
   s_commonNaNToF16UI$(OBJ) \
   s_propagateNaNF16UI$(OBJ) \
@@ -112,6 +123,12 @@ OBJS_OTHERS = \
   s_roundMToUI64$(OBJ) \
   s_roundToI32$(OBJ) \
   s_roundMToI64$(OBJ) \
+  s_normSubnormalF8Sig$(OBJ) \
+  s_roundPackToF8$(OBJ) \
+  s_normRoundPackToF8$(OBJ) \
+  s_addMagsF8$(OBJ) \
+  s_subMagsF8$(OBJ) \
+  s_mulAddF8$(OBJ) \
   s_normSubnormalF16Sig$(OBJ) \
   s_roundPackToF16$(OBJ) \
   s_normRoundPackToF16$(OBJ) \
@@ -146,26 +163,58 @@ OBJS_OTHERS = \
   s_addF128M$(OBJ) \
   s_mulAddF128M$(OBJ) \
   softfloat_state$(OBJ) \
+  ui32_to_f8$(OBJ) \
   ui32_to_f16$(OBJ) \
   ui32_to_f32$(OBJ) \
   ui32_to_f64$(OBJ) \
   ui32_to_extF80M$(OBJ) \
   ui32_to_f128M$(OBJ) \
+  ui64_to_f8$(OBJ) \
   ui64_to_f16$(OBJ) \
   ui64_to_f32$(OBJ) \
   ui64_to_f64$(OBJ) \
   ui64_to_extF80M$(OBJ) \
   ui64_to_f128M$(OBJ) \
+  i32_to_f8$(OBJ) \
   i32_to_f16$(OBJ) \
   i32_to_f32$(OBJ) \
   i32_to_f64$(OBJ) \
   i32_to_extF80M$(OBJ) \
   i32_to_f128M$(OBJ) \
+  i64_to_f8$(OBJ) \
   i64_to_f16$(OBJ) \
   i64_to_f32$(OBJ) \
   i64_to_f64$(OBJ) \
   i64_to_extF80M$(OBJ) \
   i64_to_f128M$(OBJ) \
+  f8_to_ui32$(OBJ) \
+  f8_to_ui64$(OBJ) \
+  f8_to_i32$(OBJ) \
+  f8_to_i64$(OBJ) \
+  f8_to_ui32_r_minMag$(OBJ) \
+  f8_to_ui64_r_minMag$(OBJ) \
+  f8_to_i32_r_minMag$(OBJ) \
+  f8_to_i64_r_minMag$(OBJ) \
+  f8_to_f16$(OBJ) \
+  f8_to_f32$(OBJ) \
+  f8_to_f64$(OBJ) \
+  f8_to_extF80M$(OBJ) \
+  f8_to_f128M$(OBJ) \
+  f8_roundToInt$(OBJ) \
+  f8_add$(OBJ) \
+  f8_sub$(OBJ) \
+  f8_mul$(OBJ) \
+  f8_mulAdd$(OBJ) \
+  f8_div$(OBJ) \
+  f8_rem$(OBJ) \
+  f8_sqrt$(OBJ) \
+  f8_eq$(OBJ) \
+  f8_le$(OBJ) \
+  f8_lt$(OBJ) \
+  f8_eq_signaling$(OBJ) \
+  f8_le_quiet$(OBJ) \
+  f8_lt_quiet$(OBJ) \
+  f8_isSignalingNaN$(OBJ) \
   f16_to_ui32$(OBJ) \
   f16_to_ui64$(OBJ) \
   f16_to_i32$(OBJ) \
@@ -174,6 +223,7 @@ OBJS_OTHERS = \
   f16_to_ui64_r_minMag$(OBJ) \
   f16_to_i32_r_minMag$(OBJ) \
   f16_to_i64_r_minMag$(OBJ) \
+  f16_to_f8$(OBJ) \
   f16_to_f32$(OBJ) \
   f16_to_f64$(OBJ) \
   f16_to_extF80M$(OBJ) \
@@ -201,6 +251,7 @@ OBJS_OTHERS = \
   f32_to_ui64_r_minMag$(OBJ) \
   f32_to_i32_r_minMag$(OBJ) \
   f32_to_i64_r_minMag$(OBJ) \
+  f32_to_f8$(OBJ) \
   f32_to_f16$(OBJ) \
   f32_to_f64$(OBJ) \
   f32_to_extF80M$(OBJ) \
@@ -228,6 +279,7 @@ OBJS_OTHERS = \
   f64_to_ui64_r_minMag$(OBJ) \
   f64_to_i32_r_minMag$(OBJ) \
   f64_to_i64_r_minMag$(OBJ) \
+  f64_to_f8$(OBJ) \
   f64_to_f16$(OBJ) \
   f64_to_f32$(OBJ) \
   f64_to_extF80M$(OBJ) \
@@ -245,6 +297,7 @@ OBJS_OTHERS = \
   f64_lt$(OBJ) \
   f64_eq_signaling$(OBJ) \
   f64_le_quiet$(OBJ) \
+  flexfloat$(OBJ) \
   f64_lt_quiet$(OBJ) \
   f64_isSignalingNaN$(OBJ) \
   extF80M_to_ui32$(OBJ) \
@@ -255,6 +308,7 @@ OBJS_OTHERS = \
   extF80M_to_ui64_r_minMag$(OBJ) \
   extF80M_to_i32_r_minMag$(OBJ) \
   extF80M_to_i64_r_minMag$(OBJ) \
+  extF80M_to_f8$(OBJ) \
   extF80M_to_f16$(OBJ) \
   extF80M_to_f32$(OBJ) \
   extF80M_to_f64$(OBJ) \
@@ -280,6 +334,7 @@ OBJS_OTHERS = \
   f128M_to_ui64_r_minMag$(OBJ) \
   f128M_to_i32_r_minMag$(OBJ) \
   f128M_to_i64_r_minMag$(OBJ) \
+  f128M_to_f8$(OBJ) \
   f128M_to_f16$(OBJ) \
   f128M_to_f32$(OBJ) \
   f128M_to_f64$(OBJ) \
@@ -299,10 +354,12 @@ OBJS_OTHERS = \
   f128M_le_quiet$(OBJ) \
   f128M_lt_quiet$(OBJ) \
 
-OBJS_ALL = $(OBJS_PRIMITIVES) $(OBJS_SPECIALIZE) $(OBJS_OTHERS)
+OBJS_EXT = \
+
+OBJS_ALL = $(OBJS_PRIMITIVES) $(OBJS_SPECIALIZE) $(OBJS_OTHERS) $(OBJS_EXT)
 
 $(OBJS_ALL): \
-  $(OTHER_HEADERS) platform.h $(SOURCE_DIR)/include/primitiveTypes.h \
+  platform.h $(SOURCE_DIR)/include/primitiveTypes.h \
   $(SOURCE_DIR)/include/primitives.h
 $(OBJS_SPECIALIZE) $(OBJS_OTHERS): \
   $(SOURCE_DIR)/include/softfloat_types.h $(SOURCE_DIR)/include/internals.h \
@@ -314,6 +371,9 @@ $(OBJS_PRIMITIVES) $(OBJS_OTHERS): %$(OBJ): $(SOURCE_DIR)/%.c
 
 $(OBJS_SPECIALIZE): %$(OBJ): $(SOURCE_DIR)/$(SPECIALIZE_TYPE)/%.c
 	$(COMPILE_C) $(SOURCE_DIR)/$(SPECIALIZE_TYPE)/$*.c
+
+$(OBJS_EXT): %$(OBJ): $(SOURCE_DIR)/%.cpp
+	$(COMPILE_CPP) $(SOURCE_DIR)/$*.cpp
 
 softfloat$(LIB): $(OBJS_ALL)
 	$(DELETE) $@

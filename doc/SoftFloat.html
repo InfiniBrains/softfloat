@@ -7,11 +7,11 @@
 
 <BODY>
 
-<H1>Berkeley SoftFloat Release 3e: Library Interface</H1>
+<H1>Berkeley SoftFloat Release 3c: Library Interface</H1>
 
 <P>
 John R. Hauser<BR>
-2018 January 20<BR>
+2017 February 10<BR>
 </P>
 
 
@@ -106,40 +106,26 @@ Information about the standard is available elsewhere.
 </P>
 
 <P>
-The current version of SoftFloat is <NOBR>Release 3e</NOBR>.
-This release modifies the behavior of the rarely used <I>odd</I> rounding mode
-(<I>round to odd</I>, also known as <I>jamming</I>), and also adds some new
-specialization and optimization examples for those compiling SoftFloat.
+The current version of SoftFloat is <NOBR>Release 3c</NOBR>.
+The only significant difference between this release and the previous
+<NOBR>Release 3b</NOBR> is optional support for a rarely used rounding mode,
+<I>round to odd</I>, also known as <I>jamming</I>.
 </P>
 
 <P>
-The previous <NOBR>Release 3d</NOBR> fixed bugs that were found in the square
-root functions for the <NOBR>64-bit</NOBR>, <NOBR>80-bit</NOBR>, and
-<NOBR>128-bit</NOBR> floating-point formats.
-(Thanks to Alexei Sibidanov at the University of Victoria for reporting an
-incorrect result.)
-The bugs affected all prior <NOBR>Release-3</NOBR> versions of SoftFloat
-<NOBR>through 3c</NOBR>.
-The flaw in the <NOBR>64-bit</NOBR> floating-point square root function was of
-very minor impact, causing a <NOBR>1-ulp</NOBR> error (<NOBR>1 unit</NOBR> in
-the last place) a few times out of a billion.
-The bugs in the <NOBR>80-bit</NOBR> and <NOBR>128-bit</NOBR> square root
-functions were more serious.
-Although incorrect results again occurred only a few times out of a billion,
-when they did occur a large portion of the less-significant bits could be
-wrong.
-</P>
-
-<P>
-Among earlier releases, 3b was notable for adding support for the
-<NOBR>16-bit</NOBR> half-precision format.
+<NOBR>Release 3b</NOBR> differed from the earlier <NOBR>Release 3a</NOBR>
+mainly in the addition of support for the <NOBR>16-bit</NOBR> half-precision
+format.
+Depending on the specific port of SoftFloat, <NOBR>Release 3b</NOBR> may also
+have changed the result obtained when conversion of a floating-point number to
+an integer format overflows or is otherwise invalid.
 For more about the evolution of SoftFloat releases, see
 <A HREF="SoftFloat-history.html"><NOBR><CODE>SoftFloat-history.html</CODE></NOBR></A>.
 </P>
 
 <P>
 The functional interface of SoftFloat <NOBR>Release 3</NOBR> and later differs
-in many details from the releases that came before.
+in many details from that of earlier releases.
 For specifics of these differences, see <NOBR>section 9</NOBR> below,
 <I>Changes from SoftFloat <NOBR>Release 2</NOBR></I>.
 </P>
@@ -171,7 +157,7 @@ strictly required.
 <P>
 Most operations not required by the original 1985 version of the IEEE
 Floating-Point Standard but added in the 2008 version are not yet supported in
-SoftFloat <NOBR>Release 3e</NOBR>.
+SoftFloat <NOBR>Release 3c</NOBR>.
 </P>
 
 
@@ -181,7 +167,7 @@ SoftFloat <NOBR>Release 3e</NOBR>.
 The SoftFloat package was written by me, <NOBR>John R.</NOBR> Hauser.
 <NOBR>Release 3</NOBR> of SoftFloat was a completely new implementation
 supplanting earlier releases.
-The project to create <NOBR>Release 3</NOBR> (now <NOBR>through 3e</NOBR>) was
+The project to create <NOBR>Release 3</NOBR> (now <NOBR>through 3c</NOBR>) was
 done in the employ of the University of California, Berkeley, within the
 Department of Electrical Engineering and Computer Sciences, first for the
 Parallel Computing Laboratory (Par Lab) and then for the ASPIRE Lab.
@@ -215,12 +201,12 @@ Oracle, and Samsung.
 </P>
 
 <P>
-The following applies to the whole of SoftFloat <NOBR>Release 3e</NOBR> as well
+The following applies to the whole of SoftFloat <NOBR>Release 3c</NOBR> as well
 as to each source file individually.
 </P>
 
 <P>
-Copyright 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018 The Regents of the
+Copyright 2011, 2012, 2013, 2014, 2015, 2016, 2017 The Regents of the
 University of California.
 All rights reserved.
 </P>
@@ -397,7 +383,7 @@ comparisons between two values in the same floating-point format.
 
 <P>
 The following operations required by the 2008 IEEE Floating-Point Standard are
-not supported in SoftFloat <NOBR>Release 3e</NOBR>:
+not supported in SoftFloat <NOBR>Release 3c</NOBR>:
 <UL>
 <LI>
 <B>nextUp</B>, <B>nextDown</B>, <B>minNum</B>, <B>maxNum</B>, <B>minNumMag</B>,
@@ -447,8 +433,8 @@ exponent must both be zero.
 </P>
 
 <P>
-SoftFloat&rsquo;s functions are not guaranteed to operate as expected when
-inputs of type <CODE>extFloat80_t</CODE> are non-canonical.
+SoftFloat's functions are not guaranteed to operate as expected when inputs of
+type <CODE>extFloat80_t</CODE> are non-canonical.
 Assuming all of a function&rsquo;s <CODE>extFloat80_t</CODE> inputs (if any)
 are canonical, function outputs of type <CODE>extFloat80_t</CODE> will always
 be canonical.
@@ -593,15 +579,16 @@ Variable <CODE>softfloat_roundingMode</CODE> is initialized to
 </P>
 
 <P>
-When <CODE>softfloat_round_odd</CODE> is the rounding mode for a function that
-rounds to an integer value (either conversion to an integer format or a
-&lsquo;<CODE>roundToInt</CODE>&rsquo; function), if the input is not already an
-integer, the rounded result is the closest <EM>odd</EM> integer.
-For other operations, this rounding mode acts as though the floating-point
-result is first rounded to minimum magnitude, the same as
+If supported, mode <CODE>softfloat_round_odd</CODE> first rounds a
+floating-point result to minimum magnitude, the same as
 <CODE>softfloat_round_minMag</CODE>, and then, if the result is inexact, the
 least-significant bit of the result is set <NOBR>to 1</NOBR>.
-Rounding to odd is also known as <EM>jamming</EM>.
+This rounding mode is also known as <EM>jamming</EM>.
+As a special case, when <CODE>softfloat_round_odd</CODE> is the rounding mode
+for a function that rounds to an integer value (either conversion to an integer
+format or a &lsquo;<CODE>roundToInt</CODE>&rsquo; function), rounding is the
+same as <CODE>softfloat_round_minMag</CODE>, without any change to the
+least-significant integer bit.
 </P>
 
 <H3>6.2. Underflow Detection</H3>
@@ -821,6 +808,12 @@ The <CODE><I>roundingMode</I></CODE> argument specifies the rounding mode for
 the conversion.
 The variable that usually indicates rounding mode,
 <CODE>softfloat_roundingMode</CODE>, is ignored.
+If <CODE><I>roundingMode</I></CODE> is <CODE>softfloat_round_odd</CODE>,
+rounding is to minimum magnitude, the same as
+<CODE>softfloat_round_minMag</CODE>, rather than to an odd integer.
+</P>
+
+<P>
 Argument <CODE><I>exact</I></CODE> determines whether the <I>inexact</I>
 exception flag is raised if the conversion is not exact.
 If <CODE><I>exact</I></CODE> is <CODE>true</CODE>, the <I>inexact</I> flag may
@@ -1082,6 +1075,12 @@ The <CODE><I>roundingMode</I></CODE> argument specifies the rounding mode to
 apply.
 The variable that usually indicates rounding mode,
 <CODE>softfloat_roundingMode</CODE>, is ignored.
+If <CODE><I>roundingMode</I></CODE> is <CODE>softfloat_round_odd</CODE>,
+rounding is to minimum magnitude, the same as
+<CODE>softfloat_round_minMag</CODE>, rather than to an odd integer value.
+</P>
+
+<P>
 Argument <CODE><I>exact</I></CODE> determines whether the <I>inexact</I>
 exception flag is raised if the conversion is not exact.
 If <CODE><I>exact</I></CODE> is <CODE>true</CODE>, the <I>inexact</I> flag may

@@ -1,8 +1,6 @@
-build/*/*.o
-build/*/*.a
-
-.idea/
+*.o
+*.a
 
 cmake-build-debug/
 
-.DS_Store
+.idea/

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.10.2)
 
 project(softfloat)
 
@@ -14,329 +14,320 @@ include_directories(softfloat PUBLIC
         "${CMAKE_CURRENT_SOURCE_DIR}/build/Linux-386-GCC"
         )
 
-file(GLOB SPECIALIZE_SRC
-        "${SOURCE_DIR}/${SPECIALIZE_TYPE}/*.h"
-        "${SOURCE_DIR}/${SPECIALIZE_TYPE}/*.hpp"
-        "${SOURCE_DIR}/${SPECIALIZE_TYPE}/*.c"
-        "${SOURCE_DIR}/${SPECIALIZE_TYPE}/*.cpp"
-        )
-
-file(GLOB INCLUDE_SRC
-        "${SOURCE_DIR}/include/*.h"
-        "${SOURCE_DIR}/include/*.hpp"
-        "${SOURCE_DIR}/include/*.c"
-        "${SOURCE_DIR}/include/*.cpp"
-        )
-
-file(GLOB BUILD_SRC
-        "${CMAKE_CURRENT_SOURCE_DIR}/build/Linux-386-GCC/*.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/build/Linux-386-GCC/*.hpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/build/Linux-386-GCC/*.c"
-        "${CMAKE_CURRENT_SOURCE_DIR}/build/Linux-386-GCC/*.cpp"
-        )
-add_library(sw SHARED
-        ${BUILD_SRC}
-        ${INCLUDE_SRC}
-        ${SPECIALIZE_SRC})
-
+#file(GLOB SPECIALIZE_SRC
+#        "${SOURCE_DIR}/${SPECIALIZE_TYPE}/*.h"
+#        "${SOURCE_DIR}/${SPECIALIZE_TYPE}/*.hpp"
+#        "${SOURCE_DIR}/${SPECIALIZE_TYPE}/*.c"
+#        "${SOURCE_DIR}/${SPECIALIZE_TYPE}/*.cpp"
+#        )
+#
+#file(GLOB INCLUDE_SRC
+#        "${SOURCE_DIR}/include/*.h"
+#        "${SOURCE_DIR}/include/*.hpp"
+#        "${SOURCE_DIR}/include/*.c"
+#        "${SOURCE_DIR}/include/*.cpp"
+#        )
+#
+#file(GLOB BUILD_SRC
+#        "${CMAKE_CURRENT_SOURCE_DIR}/build/Linux-386-GCC/*.h"
+#        "${CMAKE_CURRENT_SOURCE_DIR}/build/Linux-386-GCC/*.hpp"
+#        "${CMAKE_CURRENT_SOURCE_DIR}/build/Linux-386-GCC/*.c"
+#        "${CMAKE_CURRENT_SOURCE_DIR}/build/Linux-386-GCC/*.cpp"
+#        )
 #add_library(sw SHARED
-#        ${SOURCE_DIR}/s_compare96M.c
-#        ${SOURCE_DIR}/s_compare128M.c
-#        ${SOURCE_DIR}/s_shortShiftLeft64To96M.c
-#        ${SOURCE_DIR}/s_shortShiftLeftM.c
-#        ${SOURCE_DIR}/s_shiftLeftM.c
-#        ${SOURCE_DIR}/s_shortShiftRightM.c
-#        ${SOURCE_DIR}/s_shortShiftRightJam64.c
-#${SOURCE_DIR}/s_shortShiftRightJamM.c
-#${SOURCE_DIR}/s_shiftRightJam32.c
-#${SOURCE_DIR}/s_shiftRightJam64.c
-#${SOURCE_DIR}/s_shiftRightJamM.c
-#${SOURCE_DIR}/s_shiftRightM.c
-#${SOURCE_DIR}/s_countLeadingZeros8.c
-#${SOURCE_DIR}/s_countLeadingZeros16.c
-#${SOURCE_DIR}/s_countLeadingZeros32.c
-#${SOURCE_DIR}/s_countLeadingZeros64.c
-#${SOURCE_DIR}/s_addM.c
-#${SOURCE_DIR}/s_addCarryM.c
-#${SOURCE_DIR}/s_addComplCarryM.c
-#${SOURCE_DIR}/s_negXM.c
-#${SOURCE_DIR}/s_sub1XM.c
-#${SOURCE_DIR}/s_subM.c
-#${SOURCE_DIR}/s_mul64To128M.c
-#${SOURCE_DIR}/s_mul128MTo256M.c
-#${SOURCE_DIR}/s_approxRecip_1Ks.c
-#${SOURCE_DIR}/s_approxRecip32_1.c
-#${SOURCE_DIR}/s_approxRecipSqrt_1Ks.c
-#${SOURCE_DIR}/s_approxRecipSqrt32_1.c
-#${SOURCE_DIR}/s_remStepMBy32.c
-#
-#
-#${SOURCE_DIR}/${SPECIALIZE_TYPE}/softfloat_raiseFlags.c
-#${SOURCE_DIR}/${SPECIALIZE_TYPE}/s_f16UIToCommonNaN.c
-#${SOURCE_DIR}/${SPECIALIZE_TYPE}/s_commonNaNToF16UI.c
-#${SOURCE_DIR}/${SPECIALIZE_TYPE}/s_propagateNaNF16UI.c
-#${SOURCE_DIR}/${SPECIALIZE_TYPE}/s_f32UIToCommonNaN.c
-#${SOURCE_DIR}/${SPECIALIZE_TYPE}/s_commonNaNToF32UI.c
-#${SOURCE_DIR}/${SPECIALIZE_TYPE}/s_propagateNaNF32UI.c
-#${SOURCE_DIR}/${SPECIALIZE_TYPE}/s_f64UIToCommonNaN.c
-#${SOURCE_DIR}/${SPECIALIZE_TYPE}/s_commonNaNToF64UI.c
-#${SOURCE_DIR}/${SPECIALIZE_TYPE}/s_propagateNaNF64UI.c
-#${SOURCE_DIR}/${SPECIALIZE_TYPE}/extF80M_isSignalingNaN.c
-#${SOURCE_DIR}/${SPECIALIZE_TYPE}/s_extF80MToCommonNaN.c
-#${SOURCE_DIR}/${SPECIALIZE_TYPE}/s_commonNaNToExtF80M.c
-#${SOURCE_DIR}/${SPECIALIZE_TYPE}/s_propagateNaNExtF80M.c
-#${SOURCE_DIR}/${SPECIALIZE_TYPE}/f128M_isSignalingNaN.c
-#${SOURCE_DIR}/${SPECIALIZE_TYPE}/s_f128MToCommonNaN.c
-#${SOURCE_DIR}/${SPECIALIZE_TYPE}/s_commonNaNToF128M.c
-#${SOURCE_DIR}/${SPECIALIZE_TYPE}/s_propagateNaNF128M.c
-#
-#
-#${SOURCE_DIR}/s_roundToUI32.c
-#${SOURCE_DIR}/s_roundMToUI64.c
-#${SOURCE_DIR}/s_roundToI32.c
-#${SOURCE_DIR}/s_roundMToI64.c
-#${SOURCE_DIR}/s_normSubnormalF16Sig.c
-#${SOURCE_DIR}/s_roundPackToF16.c
-#${SOURCE_DIR}/s_normRoundPackToF16.c
-#${SOURCE_DIR}/s_addMagsF16.c
-#${SOURCE_DIR}/s_subMagsF16.c
-#${SOURCE_DIR}/s_mulAddF16.c
-#${SOURCE_DIR}/s_normSubnormalF32Sig.c
-#${SOURCE_DIR}/s_roundPackToF32.c
-#${SOURCE_DIR}/s_normRoundPackToF32.c
-#${SOURCE_DIR}/s_addMagsF32.c
-#${SOURCE_DIR}/s_subMagsF32.c
-#${SOURCE_DIR}/s_mulAddF32.c
-#${SOURCE_DIR}/s_normSubnormalF64Sig.c
-#${SOURCE_DIR}/s_roundPackToF64.c
-#${SOURCE_DIR}/s_normRoundPackToF64.c
-#${SOURCE_DIR}/s_addMagsF64.c
-#${SOURCE_DIR}/s_subMagsF64.c
-#${SOURCE_DIR}/s_mulAddF64.c
-#${SOURCE_DIR}/s_tryPropagateNaNExtF80M.c
-#${SOURCE_DIR}/s_invalidExtF80M.c
-#${SOURCE_DIR}/s_normExtF80SigM.c
-#${SOURCE_DIR}/s_roundPackMToExtF80M.c
-#${SOURCE_DIR}/s_normRoundPackMToExtF80M.c
-#${SOURCE_DIR}/s_addExtF80M.c
-#${SOURCE_DIR}/s_compareNonnormExtF80M.c
-#${SOURCE_DIR}/s_isNaNF128M.c
-#${SOURCE_DIR}/s_tryPropagateNaNF128M.c
-#${SOURCE_DIR}/s_invalidF128M.c
-#${SOURCE_DIR}/s_shiftNormSigF128M.c
-#${SOURCE_DIR}/s_roundPackMToF128M.c
-#${SOURCE_DIR}/s_normRoundPackMToF128M.c
-#${SOURCE_DIR}/s_addF128M.c
-#${SOURCE_DIR}/s_mulAddF128M.c
-#${SOURCE_DIR}/softfloat_state.c
-#${SOURCE_DIR}/ui32_to_f16.c
-#${SOURCE_DIR}/ui32_to_f32.c
-#${SOURCE_DIR}/ui32_to_f64.c
-#${SOURCE_DIR}/ui32_to_extF80M.c
-#${SOURCE_DIR}/ui32_to_f128M.c
-#${SOURCE_DIR}/ui64_to_f16.c
-#${SOURCE_DIR}/ui64_to_f32.c
-#${SOURCE_DIR}/ui64_to_f64.c
-#${SOURCE_DIR}/ui64_to_extF80M.c
-#${SOURCE_DIR}/ui64_to_f128M.c
-#${SOURCE_DIR}/i32_to_f16.c
-#${SOURCE_DIR}/i32_to_f32.c
-#${SOURCE_DIR}/i32_to_f64.c
-#${SOURCE_DIR}/i32_to_extF80M.c
-#${SOURCE_DIR}/i32_to_f128M.c
-#${SOURCE_DIR}/i64_to_f16.c
-#${SOURCE_DIR}/i64_to_f32.c
-#${SOURCE_DIR}/i64_to_f64.c
-#${SOURCE_DIR}/i64_to_extF80M.c
-#${SOURCE_DIR}/i64_to_f128M.c
-#${SOURCE_DIR}/f16_to_ui32.c
-#${SOURCE_DIR}/f16_to_ui64.c
-#${SOURCE_DIR}/f16_to_i32.c
-#${SOURCE_DIR}/f16_to_i64.c
-#${SOURCE_DIR}/f16_to_ui32_r_minMag.c
-#${SOURCE_DIR}/f16_to_ui64_r_minMag.c
-#${SOURCE_DIR}/f16_to_i32_r_minMag.c
-#${SOURCE_DIR}/f16_to_i64_r_minMag.c
-#${SOURCE_DIR}/f16_to_f32.c
-#${SOURCE_DIR}/f16_to_f64.c
-#${SOURCE_DIR}/f16_to_extF80M.c
-#${SOURCE_DIR}/f16_to_f128M.c
-#${SOURCE_DIR}/f16_roundToInt.c
-#${SOURCE_DIR}/f16_add.c
-#${SOURCE_DIR}/f16_sub.c
-#${SOURCE_DIR}/f16_mul.c
-#${SOURCE_DIR}/f16_mulAdd.c
-#${SOURCE_DIR}/f16_div.c
-#${SOURCE_DIR}/f16_rem.c
-#${SOURCE_DIR}/f16_sqrt.c
-#${SOURCE_DIR}/f16_eq.c
-#${SOURCE_DIR}/f16_le.c
-#${SOURCE_DIR}/f16_lt.c
-#${SOURCE_DIR}/f16_eq_signaling.c
-#${SOURCE_DIR}/f16_le_quiet.c
-#${SOURCE_DIR}/f16_lt_quiet.c
-#${SOURCE_DIR}/f16_isSignalingNaN.c
-#${SOURCE_DIR}/f32_to_ui32.c
-#${SOURCE_DIR}/f32_to_ui64.c
-#${SOURCE_DIR}/f32_to_i32.c
-#${SOURCE_DIR}/f32_to_i64.c
-#${SOURCE_DIR}/f32_to_ui32_r_minMag.c
-#${SOURCE_DIR}/f32_to_ui64_r_minMag.c
-#${SOURCE_DIR}/f32_to_i32_r_minMag.c
-#${SOURCE_DIR}/f32_to_i64_r_minMag.c
-#${SOURCE_DIR}/f32_to_f16.c
-#${SOURCE_DIR}/f32_to_f64.c
-#${SOURCE_DIR}/f32_to_extF80M.c
-#${SOURCE_DIR}/f32_to_f128M.c
-#${SOURCE_DIR}/f32_roundToInt.c
-#${SOURCE_DIR}/f32_add.c
-#${SOURCE_DIR}/f32_sub.c
-#${SOURCE_DIR}/f32_mul.c
-#${SOURCE_DIR}/f32_mulAdd.c
-#${SOURCE_DIR}/f32_div.c
-#${SOURCE_DIR}/f32_rem.c
-#${SOURCE_DIR}/f32_sqrt.c
-#${SOURCE_DIR}/f32_eq.c
-#${SOURCE_DIR}/f32_le.c
-#${SOURCE_DIR}/f32_lt.c
-#${SOURCE_DIR}/f32_eq_signaling.c
-#${SOURCE_DIR}/f32_le_quiet.c
-#${SOURCE_DIR}/f32_lt_quiet.c
-#${SOURCE_DIR}/f32_isSignalingNaN.c
-#${SOURCE_DIR}/f64_to_ui32.c
-#${SOURCE_DIR}/f64_to_ui64.c
-#${SOURCE_DIR}/f64_to_i32.c
-#${SOURCE_DIR}/f64_to_i64.c
-#${SOURCE_DIR}/f64_to_ui32_r_minMag.c
-#${SOURCE_DIR}/f64_to_ui64_r_minMag.c
-#${SOURCE_DIR}/f64_to_i32_r_minMag.c
-#${SOURCE_DIR}/f64_to_i64_r_minMag.c
-#${SOURCE_DIR}/f64_to_f16.c
-#${SOURCE_DIR}/f64_to_f32.c
-#${SOURCE_DIR}/f64_to_extF80M.c
-#${SOURCE_DIR}/f64_to_f128M.c
-#${SOURCE_DIR}/f64_roundToInt.c
-#${SOURCE_DIR}/f64_add.c
-#${SOURCE_DIR}/f64_sub.c
-#${SOURCE_DIR}/f64_mul.c
-#${SOURCE_DIR}/f64_mulAdd.c
-#${SOURCE_DIR}/f64_div.c
-#${SOURCE_DIR}/f64_rem.c
-#${SOURCE_DIR}/f64_sqrt.c
-#${SOURCE_DIR}/f64_eq.c
-#${SOURCE_DIR}/f64_le.c
-#${SOURCE_DIR}/f64_lt.c
-#${SOURCE_DIR}/f64_eq_signaling.c
-#${SOURCE_DIR}/f64_le_quiet.c
-#${SOURCE_DIR}/f64_lt_quiet.c
-#${SOURCE_DIR}/f64_isSignalingNaN.c
-#${SOURCE_DIR}/extF80M_to_ui32.c
-#${SOURCE_DIR}/extF80M_to_ui64.c
-#${SOURCE_DIR}/extF80M_to_i32.c
-#${SOURCE_DIR}/extF80M_to_i64.c
-#${SOURCE_DIR}/extF80M_to_ui32_r_minMag.c
-#${SOURCE_DIR}/extF80M_to_ui64_r_minMag.c
-#${SOURCE_DIR}/extF80M_to_i32_r_minMag.c
-#${SOURCE_DIR}/extF80M_to_i64_r_minMag.c
-#${SOURCE_DIR}/extF80M_to_f16.c
-#${SOURCE_DIR}/extF80M_to_f32.c
-#${SOURCE_DIR}/extF80M_to_f64.c
-#${SOURCE_DIR}/extF80M_to_f128M.c
-#${SOURCE_DIR}/extF80M_roundToInt.c
-#${SOURCE_DIR}/extF80M_add.c
-#${SOURCE_DIR}/extF80M_sub.c
-#${SOURCE_DIR}/extF80M_mul.c
-#${SOURCE_DIR}/extF80M_div.c
-#${SOURCE_DIR}/extF80M_rem.c
-#${SOURCE_DIR}/extF80M_sqrt.c
-#${SOURCE_DIR}/extF80M_eq.c
-#${SOURCE_DIR}/extF80M_le.c
-#${SOURCE_DIR}/extF80M_lt.c
-#${SOURCE_DIR}/extF80M_eq_signaling.c
-#${SOURCE_DIR}/extF80M_le_quiet.c
-#${SOURCE_DIR}/extF80M_lt_quiet.c
-#${SOURCE_DIR}/f128M_to_ui32.c
-#${SOURCE_DIR}/f128M_to_ui64.c
-#${SOURCE_DIR}/f128M_to_i32.c
-#${SOURCE_DIR}/f128M_to_i64.c
-#${SOURCE_DIR}/f128M_to_ui32_r_minMag.c
-#${SOURCE_DIR}/f128M_to_ui64_r_minMag.c
-#${SOURCE_DIR}/f128M_to_i32_r_minMag.c
-#${SOURCE_DIR}/f128M_to_i64_r_minMag.c
-#${SOURCE_DIR}/f128M_to_f16.c
-#${SOURCE_DIR}/f128M_to_f32.c
-#${SOURCE_DIR}/f128M_to_f64.c
-#${SOURCE_DIR}/f128M_to_extF80M.c
-#${SOURCE_DIR}/f128M_roundToInt.c
-#${SOURCE_DIR}/f128M_add.c
-#${SOURCE_DIR}/f128M_sub.c
-#${SOURCE_DIR}/f128M_mul.c
-#${SOURCE_DIR}/f128M_mulAdd.c
-#${SOURCE_DIR}/f128M_div.c
-#${SOURCE_DIR}/f128M_rem.c
-#${SOURCE_DIR}/f128M_sqrt.c
-#${SOURCE_DIR}/f128M_eq.c
-#${SOURCE_DIR}/f128M_le.c
-#${SOURCE_DIR}/f128M_lt.c
-#${SOURCE_DIR}/f128M_eq_signaling.c
-#${SOURCE_DIR}/f128M_le_quiet.c
-#${SOURCE_DIR}/f128M_lt_quiet.c
-#
-#        ${SOURCE_DIR}/${SPECIALIZE_TYPE}/s_commonNaNToF8UI.c
-#        ${SOURCE_DIR}/${SPECIALIZE_TYPE}/s_f8UIToCommonNaN.c
-#        ${SOURCE_DIR}/${SPECIALIZE_TYPE}/s_propagateNaNF8UI.c
-#        ${SOURCE_DIR}/extF80_to_f8.c
-#        ${SOURCE_DIR}/extF80M_to_f8.c
-#        ${SOURCE_DIR}/f128_to_f8.c
-#        ${SOURCE_DIR}/f128M_to_f8.c
-#        ${SOURCE_DIR}/f16_to_f8.c
-#        ${SOURCE_DIR}/f32_to_f8.c
-#        ${SOURCE_DIR}/f64_to_f8.c
-#        ${SOURCE_DIR}/f8_add.c
-#        ${SOURCE_DIR}/f8_div.c
-#        ${SOURCE_DIR}/f8_eq.c
-#        ${SOURCE_DIR}/f8_eq_signaling.c
-#        ${SOURCE_DIR}/f8_isSignalingNaN.c
-#        ${SOURCE_DIR}/f8_le.c
-#        ${SOURCE_DIR}/f8_le_quiet.c
-#        ${SOURCE_DIR}/f8_lt.c
-#        ${SOURCE_DIR}/f8_lt_quiet.c
-#        ${SOURCE_DIR}/f8_mul.c
-#        ${SOURCE_DIR}/f8_mulAdd.c
-#        ${SOURCE_DIR}/f8_rem.c
-#        ${SOURCE_DIR}/f8_roundToInt.c
-#        ${SOURCE_DIR}/f8_sqrt.c
-#        ${SOURCE_DIR}/f8_sub.c
-#        ${SOURCE_DIR}/f8_to_extF80.c
-#        ${SOURCE_DIR}/f8_to_extF80M.c
-#        ${SOURCE_DIR}/f8_to_f128.c
-#        ${SOURCE_DIR}/f8_to_f128M.c
-#        ${SOURCE_DIR}/f8_to_f16.c
-#        ${SOURCE_DIR}/f8_to_f32.c
-#        ${SOURCE_DIR}/f8_to_f64.c
-#        ${SOURCE_DIR}/f8_to_i32.c
-#        ${SOURCE_DIR}/f8_to_i32_r_minMag.c
-#        ${SOURCE_DIR}/f8_to_i64.c
-#        ${SOURCE_DIR}/f8_to_i64_r_minMag.c
-#        ${SOURCE_DIR}/f8_to_ui32.c
-#        ${SOURCE_DIR}/f8_to_ui32_r_minMag.c
-#        ${SOURCE_DIR}/f8_to_ui64.c
-#        ${SOURCE_DIR}/f8_to_ui64_r_minMag.c
-#        ${SOURCE_DIR}/flexfloat.c
-#        ${SOURCE_DIR}/i32_to_f8.c
-#        ${SOURCE_DIR}/i64_to_f8.c
-#        ${SOURCE_DIR}/s_addMagsF8.c
-#        ${SOURCE_DIR}/s_div_8.c
-#        ${SOURCE_DIR}/s_mulAddF8.c
-#        ${SOURCE_DIR}/s_normRoundPackToF8.c
-#        ${SOURCE_DIR}/s_normSubnormalF8Sig.c
-#        ${SOURCE_DIR}/s_recip_8.c
-#        ${SOURCE_DIR}/s_roundPackToF8.c
-#        ${SOURCE_DIR}/s_sqrt_8.c
-#        ${SOURCE_DIR}/s_subMagsF8.c
-#        ${SOURCE_DIR}/ui32_to_f8.c
-#        ${SOURCE_DIR}/ui64_to_f8.c
-#)
+#        ${BUILD_SRC}
+#        ${INCLUDE_SRC}
+#        ${SPECIALIZE_SRC})
+
+add_library(softfloat SHARED
+        source/s_compare96M.c
+        source/s_compare128M.c
+        source/s_shortShiftLeft64To96M.c
+        source/s_shortShiftLeftM.c
+        source/s_shiftLeftM.c
+        source/s_shortShiftRightM.c
+        source/s_shortShiftRightJam64.c
+        source/s_shortShiftRightJamM.c
+        source/s_shiftRightJam32.c
+        source/s_shiftRightJam64.c
+        source/s_shiftRightJamM.c
+        source/s_shiftRightM.c
+        source/s_countLeadingZeros8.c
+        source/s_countLeadingZeros16.c
+        source/s_countLeadingZeros32.c
+        source/s_countLeadingZeros64.c
+        source/s_addM.c
+        source/s_addCarryM.c
+        source/s_addComplCarryM.c
+        source/s_negXM.c
+        source/s_sub1XM.c
+        source/s_subM.c
+        source/s_mul64To128M.c
+        source/s_mul128MTo256M.c
+        source/s_recip_8.c
+        source/s_approxRecip_1Ks.c
+        source/s_approxRecip32_1.c
+        source/s_div_8.c
+        source/s_sqrt_8.c
+        source/s_approxRecipSqrt_1Ks.c
+        source/s_approxRecipSqrt32_1.c
+        source/s_remStepMBy32.c
+        source/8086/softfloat_raiseFlags.c
+        source/8086/s_f8UIToCommonNaN.c
+        source/8086/s_commonNaNToF8UI.c
+        source/8086/s_propagateNaNF8UI.c
+        source/8086/s_f16UIToCommonNaN.c
+        source/8086/s_commonNaNToF16UI.c
+        source/8086/s_propagateNaNF16UI.c
+        source/8086/s_f32UIToCommonNaN.c
+        source/8086/s_commonNaNToF32UI.c
+        source/8086/s_propagateNaNF32UI.c
+        source/8086/s_f64UIToCommonNaN.c
+        source/8086/s_commonNaNToF64UI.c
+        source/8086/s_propagateNaNF64UI.c
+        source/8086/extF80M_isSignalingNaN.c
+        source/8086/s_extF80MToCommonNaN.c
+        source/8086/s_commonNaNToExtF80M.c
+        source/8086/s_propagateNaNExtF80M.c
+        source/8086/f128M_isSignalingNaN.c
+        source/8086/s_f128MToCommonNaN.c
+        source/8086/s_commonNaNToF128M.c
+        source/8086/s_propagateNaNF128M.c
+        source/s_roundToUI32.c
+        source/s_roundMToUI64.c
+        source/s_roundToI32.c
+        source/s_roundMToI64.c
+        source/s_normSubnormalF8Sig.c
+        source/s_roundPackToF8.c
+        source/s_normRoundPackToF8.c
+        source/s_addMagsF8.c
+        source/s_subMagsF8.c
+        source/s_mulAddF8.c
+        source/s_normSubnormalF16Sig.c
+        source/s_roundPackToF16.c
+        source/s_normRoundPackToF16.c
+        source/s_addMagsF16.c
+        source/s_subMagsF16.c
+        source/s_mulAddF16.c
+        source/s_normSubnormalF32Sig.c
+        source/s_roundPackToF32.c
+        source/s_normRoundPackToF32.c
+        source/s_addMagsF32.c
+        source/s_subMagsF32.c
+        source/s_mulAddF32.c
+        source/s_normSubnormalF64Sig.c
+        source/s_roundPackToF64.c
+        source/s_normRoundPackToF64.c
+        source/s_addMagsF64.c
+        source/s_subMagsF64.c
+        source/s_mulAddF64.c
+        source/s_tryPropagateNaNExtF80M.c
+        source/s_invalidExtF80M.c
+        source/s_normExtF80SigM.c
+        source/s_roundPackMToExtF80M.c
+        source/s_normRoundPackMToExtF80M.c
+        source/s_addExtF80M.c
+        source/s_compareNonnormExtF80M.c
+        source/s_isNaNF128M.c
+        source/s_tryPropagateNaNF128M.c
+        source/s_invalidF128M.c
+        source/s_shiftNormSigF128M.c
+        source/s_roundPackMToF128M.c
+        source/s_normRoundPackMToF128M.c
+        source/s_addF128M.c
+        source/s_mulAddF128M.c
+        source/softfloat_state.c
+        source/ui32_to_f8.c
+        source/ui32_to_f16.c
+        source/ui32_to_f32.c
+        source/ui32_to_f64.c
+        source/ui32_to_extF80M.c
+        source/ui32_to_f128M.c
+        source/ui64_to_f8.c
+        source/ui64_to_f16.c
+        source/ui64_to_f32.c
+        source/ui64_to_f64.c
+        source/ui64_to_extF80M.c
+        source/ui64_to_f128M.c
+        source/i32_to_f8.c
+        source/i32_to_f16.c
+        source/i32_to_f32.c
+        source/i32_to_f64.c
+        source/i32_to_extF80M.c
+        source/i32_to_f128M.c
+        source/i64_to_f8.c
+        source/i64_to_f16.c
+        source/i64_to_f32.c
+        source/i64_to_f64.c
+        source/i64_to_extF80M.c
+        source/i64_to_f128M.c
+        source/f8_to_ui32.c
+        source/f8_to_ui64.c
+        source/f8_to_i32.c
+        source/f8_to_i64.c
+        source/f8_to_ui32_r_minMag.c
+        source/f8_to_ui64_r_minMag.c
+        source/f8_to_i32_r_minMag.c
+        source/f8_to_i64_r_minMag.c
+        source/f8_to_f16.c
+        source/f8_to_f32.c
+        source/f8_to_f64.c
+        source/f8_to_extF80M.c
+        source/f8_to_f128M.c
+        source/f8_roundToInt.c
+        source/f8_add.c
+        source/f8_sub.c
+        source/f8_mul.c
+        source/f8_mulAdd.c
+        source/f8_div.c
+        source/f8_rem.c
+        source/f8_sqrt.c
+        source/f8_eq.c
+        source/f8_le.c
+        source/f8_lt.c
+        source/f8_eq_signaling.c
+        source/f8_le_quiet.c
+        source/f8_lt_quiet.c
+        source/f8_isSignalingNaN.c
+        source/f16_to_ui32.c
+        source/f16_to_ui64.c
+        source/f16_to_i32.c
+        source/f16_to_i64.c
+        source/f16_to_ui32_r_minMag.c
+        source/f16_to_ui64_r_minMag.c
+        source/f16_to_i32_r_minMag.c
+        source/f16_to_i64_r_minMag.c
+        source/f16_to_f8.c
+        source/f16_to_f32.c
+        source/f16_to_f64.c
+        source/f16_to_extF80M.c
+        source/f16_to_f128M.c
+        source/f16_roundToInt.c
+        source/f16_add.c
+        source/f16_sub.c
+        source/f16_mul.c
+        source/f16_mulAdd.c
+        source/f16_div.c
+        source/f16_rem.c
+        source/f16_sqrt.c
+        source/f16_eq.c
+        source/f16_le.c
+        source/f16_lt.c
+        source/f16_eq_signaling.c
+        source/f16_le_quiet.c
+        source/f16_lt_quiet.c
+        source/f16_isSignalingNaN.c
+        source/f32_to_ui32.c
+        source/f32_to_ui64.c
+        source/f32_to_i32.c
+        source/f32_to_i64.c
+        source/f32_to_ui32_r_minMag.c
+        source/f32_to_ui64_r_minMag.c
+        source/f32_to_i32_r_minMag.c
+        source/f32_to_i64_r_minMag.c
+        source/f32_to_f8.c
+        source/f32_to_f16.c
+        source/f32_to_f64.c
+        source/f32_to_extF80M.c
+        source/f32_to_f128M.c
+        source/f32_roundToInt.c
+        source/f32_add.c
+        source/f32_sub.c
+        source/f32_mul.c
+        source/f32_mulAdd.c
+        source/f32_div.c
+        source/f32_rem.c
+        source/f32_sqrt.c
+        source/f32_eq.c
+        source/f32_le.c
+        source/f32_lt.c
+        source/f32_eq_signaling.c
+        source/f32_le_quiet.c
+        source/f32_lt_quiet.c
+        source/f32_isSignalingNaN.c
+        source/f64_to_ui32.c
+        source/f64_to_ui64.c
+        source/f64_to_i32.c
+        source/f64_to_i64.c
+        source/f64_to_ui32_r_minMag.c
+        source/f64_to_ui64_r_minMag.c
+        source/f64_to_i32_r_minMag.c
+        source/f64_to_i64_r_minMag.c
+        source/f64_to_f8.c
+        source/f64_to_f16.c
+        source/f64_to_f32.c
+        source/f64_to_extF80M.c
+        source/f64_to_f128M.c
+        source/f64_roundToInt.c
+        source/f64_add.c
+        source/f64_sub.c
+        source/f64_mul.c
+        source/f64_mulAdd.c
+        source/f64_div.c
+        source/f64_rem.c
+        source/f64_sqrt.c
+        source/f64_eq.c
+        source/f64_le.c
+        source/f64_lt.c
+        source/f64_eq_signaling.c
+        source/f64_le_quiet.c
+        source/flexfloat.c
+        source/f64_lt_quiet.c
+        source/f64_isSignalingNaN.c
+        source/extF80M_to_ui32.c
+        source/extF80M_to_ui64.c
+        source/extF80M_to_i32.c
+        source/extF80M_to_i64.c
+        source/extF80M_to_ui32_r_minMag.c
+        source/extF80M_to_ui64_r_minMag.c
+        source/extF80M_to_i32_r_minMag.c
+        source/extF80M_to_i64_r_minMag.c
+        source/extF80M_to_f8.c
+        source/extF80M_to_f16.c
+        source/extF80M_to_f32.c
+        source/extF80M_to_f64.c
+        source/extF80M_to_f128M.c
+        source/extF80M_roundToInt.c
+        source/extF80M_add.c
+        source/extF80M_sub.c
+        source/extF80M_mul.c
+        source/extF80M_div.c
+        source/extF80M_rem.c
+        source/extF80M_sqrt.c
+        source/extF80M_eq.c
+        source/extF80M_le.c
+        source/extF80M_lt.c
+        source/extF80M_eq_signaling.c
+        source/extF80M_le_quiet.c
+        source/extF80M_lt_quiet.c
+        source/f128M_to_ui32.c
+        source/f128M_to_ui64.c
+        source/f128M_to_i32.c
+        source/f128M_to_i64.c
+        source/f128M_to_ui32_r_minMag.c
+        source/f128M_to_ui64_r_minMag.c
+        source/f128M_to_i32_r_minMag.c
+        source/f128M_to_i64_r_minMag.c
+        source/f128M_to_f8.c
+        source/f128M_to_f16.c
+        source/f128M_to_f32.c
+        source/f128M_to_f64.c
+        source/f128M_to_extF80M.c
+        source/f128M_roundToInt.c
+        source/f128M_add.c
+        source/f128M_sub.c
+        source/f128M_mul.c
+        source/f128M_mulAdd.c
+        source/f128M_div.c
+        source/f128M_rem.c
+        source/f128M_sqrt.c
+        source/f128M_eq.c
+        source/f128M_le.c
+        source/f128M_lt.c
+        source/f128M_eq_signaling.c
+        source/f128M_le_quiet.c
+        source/f128M_lt_quiet.c
+        )
 
 add_executable(example "${CMAKE_CURRENT_SOURCE_DIR}/example/example.cpp")
-target_link_libraries(example PUBLIC sw)
+target_link_libraries(example PUBLIC softfloat)
