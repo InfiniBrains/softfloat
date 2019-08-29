@@ -13,7 +13,7 @@ include_directories(softfloat PUBLIC
         "${SOURCE_DIR}/include"
         "${CMAKE_CURRENT_SOURCE_DIR}/build/Linux-386-GCC"
         )
-
+# TODO: use GLOB instead of listing all files.
 #file(GLOB SPECIALIZE_SRC
 #        "${SOURCE_DIR}/${SPECIALIZE_TYPE}/*.h"
 #        "${SOURCE_DIR}/${SPECIALIZE_TYPE}/*.hpp"
