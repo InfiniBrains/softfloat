@@ -73,18 +73,18 @@ int main(){
 	printf("Double value \t%f\n", dbl);
 
 	printf("Double is \t%#lx\n", *(uint64_t*) &dbl);
-	printf("float64 is \t%#lx\n", f64); /* f64 is a class object */
-	printf("float64_t is \t%#lx\n\n", f64t); /* f64t is a struct as in the C case */
+	printf("float64 is \t%#lx\n", *(uint64_t*) &f64); /* f64 is a class object */
+	printf("float64_t is \t%#lx\n\n", *(uint64_t*) &f64t); /* f64t is a struct as in the C case */
 
-	printf("float32 is \t%#x\n", f32);
-	printf("float32 casted \t%#x\n\n", f32tmp);
+	printf("float32 is \t%#x\n", *(uint32_t*) &f32);
+	printf("float32 casted \t%#x\n\n", *(uint32_t*) &f32tmp);
 
-	printf("float16 is \t%#x\n",  f16);
-	printf("float16_t is \t%#x\n\n",  f16t);
+	printf("float16 is \t%#x\n",  *(uint16_t*) &f16);
+	printf("float16_t is \t%#x\n\n",  *(uint16_t*) &f16t);
 
-	printf("float16_t sum is \t%#x\n", f16sum);
-	printf("float16_t sum2 is \t%#x\n", f16sum2);
-	printf("float16_t sum3 is \t%#x\n", f16sum3);
+	printf("float16_t sum is \t%#x\n", *(uint16_t*) &f16sum);
+	printf("float16_t sum2 is \t%#x\n", *(uint16_t*) &f16sum2);
+	printf("float16_t sum3 is \t%#x\n", *(uint16_t*) &f16sum3);
 
 	return 0;
 }
